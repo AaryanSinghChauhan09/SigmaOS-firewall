@@ -1,8 +1,17 @@
-# SigmaOS-firewall
+# SigmaOS firewall
 
-This repository is a SigmaOS component checkout. Its implementation scope and integration status are tracked in the central SigmaOS component registry.
+This crate is currently a `no_std` identity scaffold. Its library constructs a
+`Component` named `SigmaOS-firewall`; it does not filter packets, manage
+firewall rules, or enforce a network security policy. The inline unit test
+checks only the fixed name.
 
-## Development
+## Build
 
-Review the repository history and existing source-level checks before changing behavior. Keep changes focused, document user-visible workflows, and update the central registry only when implementation evidence supports a status change.
+```sh
+cargo check --lib
+```
+
+## License
+
+Apache-2.0. See [`Cargo.toml`](Cargo.toml).
 
