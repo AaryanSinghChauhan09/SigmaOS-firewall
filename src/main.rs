@@ -1,3 +1,5 @@
+use std::env;
+use log::{info, warn, error, debug};
 use anyhow::Result;
 use clap::Parser;
 use firewall::firewall;
@@ -8,7 +10,7 @@ struct Cli {
     debug: bool,
 }
 
-fn main() -> Result<()> {
+fn main() -> Result<()> { -> Result<()> {
     let cli = Cli::parse();
     let config = firewall::Config { debug: cli.debug, ..Default::default() };
     let mut component = firewall::new(config);
@@ -23,4 +25,19 @@ fn main() -> Result<()> {
     
     component.stop()?;
     Ok(())
+}
+
+#[derive(Debug, Clone)]
+struct Config {
+    verbose: bool,
+    dry_run: bool,
+}
+
+impl Config {
+    fn from_env() -> Self {
+        Config {
+            verbose: env::var("VERBOSE").is_ok(),
+            dry_run: env::var("DRY_RUN").is_ok(),
+        }
+    }
 }
