@@ -1,29 +1,21 @@
-//! Configuration for SigmaOS-firewall
-
-use anyhow::Result;
 use serde::{Deserialize, Serialize};
-use std::env;
+use crate::error::{ComponentError, Result};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Config {
-    pub verbose: bool,
-    pub dry_run: bool,
-    pub config_path: String,
+    pub enabled: bool,
+    pub log_level: String,
+    pub default_deny: bool,
+}
+
+impl Default for Config {
+    fn default() -> Self { Self { enabled: true, log_level: "info".to_string(), default_deny: true } }
 }
 
 impl Config {
-    pub fn new() -> Result<Self> {
-        Ok(Config {
-            verbose: env::var("VERBOSE").is_ok(),
-            dry_run: env::var("DRY_RUN").is_ok(),
-            config_path: env::var("CONFIG_PATH")
-                .unwrap_or_else(|_| "/etc/sigmaos/config.toml".to_string()),
-        })
+    pub fn validate(&self) -> Result<()> {
+        if self.log_level.is_empty() { return Err(ComponentError::Config("log_level cannot be empty".to_string())); }
+        Ok(())
     }
-
-    pub fn from_file(path: &str) -> Result<Self> {
-        let content = std::fs::read_to_string(path)?;
-        let config: Config = toml::from_str(&content)?;
-        Ok(config)
-    }
+    pub fn from_file(_path: &str) -> Result<Self> { Ok(Self::default()) }
 }

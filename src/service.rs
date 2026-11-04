@@ -1,54 +1,24 @@
-//! Service implementation for SigmaOS-firewall
+use crate::config::Config;
+use crate::error::{ComponentError, Result};
 
-use crate::{Config, Error, Result};
-use log::{info, error};
-use tokio::sync::RwLock;
-use std::sync::Arc;
+#[derive(Debug, Clone, PartialEq)]
+pub enum ServiceStatus { Stopped, Running, Failed(String) }
 
 pub struct Service {
     config: Config,
-    state: Arc<RwLock<ServiceState>>,
-}
-
-#[derive(Debug, Clone)]
-struct ServiceState {
-    running: bool,
-    count: u64,
+    status: ServiceStatus,
 }
 
 impl Service {
-    pub fn new(config: Config) -> Result<Self> {
-        Ok(Service {
-            config,
-            state: Arc::new(RwLock::new(ServiceState {
-                running: false,
-                count: 0,
-            })),
-        })
+    pub fn new(config: Config) -> Self { Self { config, status: ServiceStatus::Stopped } }
+    pub fn start(&mut self) -> Result<()> {
+        if self.status == ServiceStatus::Running { return Err(ComponentError::Service("already running".to_string())); }
+        self.status = ServiceStatus::Running; Ok(())
     }
-
-    pub async fn run(&self) -> Result<()> {
-        info!("Starting SigmaOS-firewall service");
-        
-        let mut state = self.state.write().await;
-        state.running = true;
-        
-        info!("Service started successfully");
-        Ok(())
+    pub fn stop(&mut self) -> Result<()> {
+        if self.status == ServiceStatus::Stopped { return Err(ComponentError::Service("not running".to_string())); }
+        self.status = ServiceStatus::Stopped; Ok(())
     }
-
-    pub async fn stop(&self) -> Result<()> {
-        info!("Stopping SigmaOS-firewall service");
-        
-        let mut state = self.state.write().await;
-        state.running = false;
-        
-        info!("Service stopped successfully");
-        Ok(())
-    }
-
-    pub async fn status(&self) -> Result<bool> {
-        let state = self.state.read().await;
-        Ok(state.running)
-    }
+    pub fn is_running(&self) -> bool { self.status == ServiceStatus::Running }
+    pub fn config(&self) -> &Config { &self.config }
 }

@@ -1,20 +1,19 @@
-//! Error types for SigmaOS-firewall
-
 use thiserror::Error;
 
-pub type Result<T> = std::result::Result<T, Error>;
-
-#[derive(Error, Debug)]
-pub enum Error {
+#[derive(Debug, Error)]
+pub enum ComponentError {
     #[error("Configuration error: {0}")]
     Config(String),
-    
+    #[error("Service error: {0}")]
+    Service(String),
     #[error("IO error: {0}")]
     Io(#[from] std::io::Error),
-    
-    #[error("Serialization error: {0}")]
-    Serialization(#[from] serde_json::Error),
-    
-    #[error("Runtime error: {0}")]
-    Runtime(String),
+    #[error("Internal error: {0}")]
+    Internal(String),
 }
+
+impl From<anyhow::Error> for ComponentError {
+    fn from(e: anyhow::Error) -> Self { ComponentError::Internal(e.to_string()) }
+}
+
+pub type Result<T> = std::result::Result<T, ComponentError>;
