@@ -1,21 +1,11 @@
 [package]
-name = "sigmaos-firewall"
+name = "sigmaos_firewall"
 version = "0.1.0"
 edition = "2021"
-authors = ["SigmaOS Team"]
-license = "MIT OR Apache-2.0"
-description = "SigmaOS firewall component - default-deny packet filtering and port policy"
+description = "SigmaOS firewall model: rules, rule sets, actions, NAT, connection tracking"
 
-[[bin]]
-name = "sigmaos-firewall"
-path = "src/main.rs"
+[lib]
+name = "sigmaos_firewall"
+path = "src/lib.rs"
 
 [dependencies]
-anyhow = "1.0"
-thiserror = "1.0"
-log = "0.4"
-env_logger = "0.10"
-serde = { version = "1.0", features = ["derive"] }
-toml = "0.8"
-
-[dev-dependencies]
