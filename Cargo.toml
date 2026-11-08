@@ -2,10 +2,9 @@
 name = "sigmaos_firewall"
 version = "0.1.0"
 edition = "2021"
-description = "SigmaOS firewall model: rules, rule sets, actions, NAT, connection tracking"
+license = "MIT"
+description = "SigmaOS firewall component inspired by Linux Mint / Omarchy / Arch Linux."
 
 [lib]
 name = "sigmaos_firewall"
 path = "src/lib.rs"
-
-[dependencies]
