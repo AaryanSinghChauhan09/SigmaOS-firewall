@@ -1,8 +1,11 @@
 [component]
 name = "SigmaOS-firewall"
-description = "Firewall policy and network sandboxing"
+description = "Reusable firewall rule, chain, NAT, and connection-tracking policy models; no host rules are applied by this crate"
 version = "0.1.0"
 tier = 2
+language = "rust"
+category = "Security"
+depends_on = ["SigmaOS-system"]
 
 [capabilities]
 contract_version = "1.0.0"

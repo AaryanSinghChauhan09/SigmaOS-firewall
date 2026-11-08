@@ -8,6 +8,18 @@
 #![forbid(unsafe_code)]
 
 use std::fmt;
+
+pub mod action;
+pub mod conntrack;
+pub mod nat;
+pub mod rule;
+pub mod ruleset;
+
+pub use action::Policy;
+pub use conntrack::{ConntrackEntry, ConntrackState};
+pub use nat::{NatRule, NatType};
+pub use rule::{FirewallRule, RuleAction, RuleMatch};
+pub use ruleset::{Chain, ChainType, RuleSet};
 /// Errors for `ToolError` operations. Fail-fast: invalid input is rejected.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum ToolError {
