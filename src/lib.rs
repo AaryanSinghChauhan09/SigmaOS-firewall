@@ -2,6 +2,8 @@
 //! rules with matches and targets, deterministic packet evaluation.
 //! Replaces the earlier CLI-dispatch/`Plan` placeholder stubs.
 
+pub mod sigmafirewallmanager2;
+
 use std::collections::BTreeMap;
 use std::fmt;
 use std::net::IpAddr;
